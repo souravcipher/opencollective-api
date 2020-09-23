@@ -172,5 +172,8 @@
   },
   "sentry": {
     "dsn": "SENTRY_DSN"
+  },
+  "akismet": {
+    "key": "AKISMET_KEY"
   }
 }
