@@ -30,6 +30,9 @@ async function run() {
 
   const tierIds = tiers.map(tier => tier.id);
 
+  // FIXME: what if the monthly contribution is not executed the 1st of the month?
+  // It's still gonna dispatch the funds, Oops ...
+  // And this, everyday until the monthly contribution is triggered
   const allOrders = await models.Order.findAll({
     where: {
       status: status.ACTIVE,
