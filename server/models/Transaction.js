@@ -811,7 +811,7 @@ export default (Sequelize, DataTypes) => {
     return transaction;
   };
 
-  Transaction.validate = async transaction => {
+  Transaction.validate = async (transaction, { validateOppositeTransaction = true } = {}) => {
     // Skip as there is a known bug there
     // https://github.com/opencollective/opencollective/issues/3935
     if (transaction.PlatformTipForTransactionGroup) {
@@ -822,6 +822,17 @@ export default (Sequelize, DataTypes) => {
     // https://github.com/opencollective/opencollective/issues/3934
     if (transaction.PlatformTipForTransactionGroup && transaction.taxAmount) {
       return;
+    }
+
+    for (const key of [
+      'TransactionGroup',
+      'amount',
+      'currency',
+      'amountInHostCurrency',
+      'hostCurrency',
+      'hostCurrencyFxRate',
+    ]) {
+      assert(transaction[key], `${key} should be set`);
     }
 
     const hostCurrencyFxRate = transaction.hostCurrencyFxRate || 1;
@@ -838,6 +849,11 @@ export default (Sequelize, DataTypes) => {
       netAmountInCollectiveCurrency,
       'netAmountInCollectiveCurrency should be accurate',
     );
+
+    // Stop there if we don't want to validate opposite Transaction
+    if (!validateOppositeTransaction) {
+      return;
+    }
 
     // Stop there in this case, no need to check oppositeTransaction as it doesn't exist
     if (transaction.CollectiveId === transaction.FromCollectiveId) {
@@ -891,7 +907,7 @@ export default (Sequelize, DataTypes) => {
   };
 
   Transaction.assertAmountsLooselyEqual = (actual, expected, message) => {
-    assert(Math.abs(actual - expected) <= 1, `${message}: ${actual} doesn't loosely equal to ${expected}`);
+    assert(Math.abs(actual - expected) <= 100, `${message}: ${actual} doesn't loosely equal to ${expected}`);
   };
 
   return Transaction;

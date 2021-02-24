@@ -38,6 +38,7 @@ async function createPaymentMethod(originalCreditTransaction) {
     ...pick(originalCreditTransaction, ['currency', 'hostCurrency', 'CreatedByUserId']),
     description: 'BackYourStack dispatch Payment Method',
     amount: shareableAmount,
+    amountInHostCurrency: shareableAmount,
     CollectiveId: originalCreditTransaction.FromCollectiveId,
     FromCollectiveId: originalCreditTransaction.CollectiveId,
     paymentProcessorFeeInHostCurrency: 0,
