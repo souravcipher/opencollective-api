@@ -1,8 +1,13 @@
 {
-  "extends": ["plugin:@typescript-eslint/recommended", "plugin:import/typescript", "opencollective"],
+  "extends": [
+    "plugin:@typescript-eslint/recommended",
+    "plugin:import/typescript",
+    "plugin:security/recommended",
+    "opencollective"
+  ],
   "parser": "@typescript-eslint/parser",
   "env": { "mocha": true },
-  "plugins": ["@typescript-eslint", "graphql", "mocha", "simple-import-sort"],
+  "plugins": ["@typescript-eslint", "graphql", "mocha", "simple-import-sort", "security"],
   "rules": {
     // console logs are OK in Node
     "no-console": "off",
@@ -63,8 +68,8 @@
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": ["error"]
   },
-  // Disable typescript checks in JS
   "overrides": [
+    // Disable typescript checks in JS
     {
       "files": ["*.js"],
       "rules": {
@@ -72,6 +77,13 @@
         "@typescript-eslint/indent": "off",
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off"
+      }
+    },
+    // Ignore eslint-plugin-security in tests
+    {
+      "files": ["test/**/*.js", "test/**/*.ts"],
+      "rules": {
+        "security/detect-object-injection": "off"
       }
     }
   ],
