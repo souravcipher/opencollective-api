@@ -47,7 +47,7 @@ const ATTACHED_CSV_COLUMNS = [
   'source',
 ];
 
-export async function run() {
+export async function run(date) {
   console.info(`Invoicing hosts pending fees and tips for ${moment(date).subtract(1, 'month').format('MMMM')}.`);
   const [pastMonthTransactions] = await sequelize.query(
     `
@@ -462,7 +462,7 @@ export async function run() {
 }
 
 if (require.main === module) {
-  run()
+  run(date)
     .catch(e => {
       console.error(e);
       process.exit(1);
