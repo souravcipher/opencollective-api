@@ -439,11 +439,12 @@ describe('server/lib/payments', () => {
       utils.snapshotTransactions(allTransactions, { columns: SNAPSHOT_COLUMNS });
 
       const refundedTransactions = await order.getTransactions({ where: { isRefund: true } });
-      // TODO: will be length=10 when we adjust isRefund for PAYMENT_PROCESSOR_FEE
-      expect(refundedTransactions).to.have.lengthOf(8);
+      expect(refundedTransactions).to.have.lengthOf(10);
       expect(refundedTransactions.filter(t => t.kind === 'CONTRIBUTION')).to.have.lengthOf(2);
       expect(refundedTransactions.filter(t => t.kind === 'PLATFORM_TIP' && t.isDebt)).to.have.lengthOf(2);
       expect(refundedTransactions.filter(t => t.kind === 'PLATFORM_TIP' && !t.isDebt)).to.have.lengthOf(2);
+      expect(refundedTransactions.filter(t => t.kind === 'HOST_FEE')).to.have.lengthOf(2);
+      expect(refundedTransactions.filter(t => t.kind === 'PAYMENT_PROCESSOR_FEE')).to.have.lengthOf(2);
 
       // TODO(LedgerRefactor): Check debt transactions and settlement status
 
