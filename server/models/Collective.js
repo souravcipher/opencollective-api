@@ -68,6 +68,7 @@ import { capitalize, cleanTags, formatCurrency, getDomain, md5, sumByWhen } from
 
 import CustomDataTypes from './DataTypes';
 import { PayoutMethodTypes } from './PayoutMethod';
+import { TransactionSettlementStatus } from './TransactionSettlement';
 
 const debug = debugLib('models:Collective');
 
@@ -2978,7 +2979,20 @@ function defineModel() {
       ],
     });
 
-    const hostFees = Math.abs(sumBy(transactions, 'hostFeeInHostCurrency'));
+    const transactionGroups = transactions.map(t => t.TransactionGroup);
+
+    const hostFeeTransactions = await models.Transaction.findAll({
+      attributes: ['amountInHostCurrency'],
+      where: {
+        TransactionGroup: transactionGroups,
+        kind: TransactionKind.HOST_FEE,
+        CollectiveId: this.id,
+      },
+    });
+
+    const legacyHostFees = Math.abs(sumBy(transactions, 'hostFeeInHostCurrency'));
+    const newHostFees = sumBy(hostFeeTransactions, 'amountInHostCurrency');
+    const hostFees = legacyHostFees + newHostFees;
     const platformFees = Math.abs(sumBy(transactions, 'platformFeeInHostCurrency'));
     const pendingPlatformFees = Math.abs(sumByWhen(transactions, 'platformFeeInHostCurrency', isPendingTransaction));
     const hostFeeShare = Math.abs(
@@ -2988,6 +3002,7 @@ function defineModel() {
         t => !t.platformFeeInHostCurrency && t.hostFeeInHostCurrency,
       ),
     );
+
     const pendingHostFeeShare = Math.abs(
       sumByWhen(
         transactions,
@@ -2996,28 +3011,38 @@ function defineModel() {
       ),
     );
 
-    const tipsTransactions = await models.Transaction.findAll({
-      where: {
-        ...pick(PLATFORM_TIP_TRANSACTION_PROPERTIES, ['CollectiveId', 'HostCollectiveId']),
-        createdAt: { [Op.gte]: from, [Op.lt]: to },
-        type: TransactionTypes.CREDIT,
-        TransactionGroup: { [Op.in]: transactions.map(t => t.TransactionGroup) },
-        kind: TransactionKind.PLATFORM_TIP,
-      },
-      include: [
-        {
-          model: models.PaymentMethod,
-          as: 'PaymentMethod',
-          include: [{ model: models.PaymentMethod, as: 'sourcePaymentMethod' }],
+    const tipsTransactions = await sequelize.query(
+      `
+        SELECT t.*, ts.status as "settlementStatus"
+        FROM "Transactions" t
+        LEFT JOIN "TransactionSettlements" ts
+          ON t."TransactionGroup" = ts."TransactionGroup"
+          AND t."kind" = ts."kind"
+        WHERE t."CollectiveId" = :collectiveId
+        AND t."TransactionGroup" IN (:transactionGroups)
+        AND t."kind" = 'PLATFORM_TIP'
+        AND t."deletedAt" IS NULL
+        AND ts."deletedAt" IS NULL
+        AND t."createdAt" >= :from
+        AND t."createdAt" < :to
+      `,
+      {
+        type: sequelize.QueryTypes.SELECT,
+        model: models.Transaction,
+        mapToModel: true,
+        replacements: {
+          collectiveId: this.id,
+          transactionGroups: transactionGroups,
+          from: from.toDate(),
+          to: to.toDate(),
         },
-      ],
-    });
+      },
+    );
 
     const getTipAmountInHostCurrency = t => t.netAmountInCollectiveCurrency / (t.data?.hostToPlatformFxRate || 1);
     const platformTips = Math.round(sumBy(tipsTransactions, getTipAmountInHostCurrency));
-    const pendingPlatformTips = Math.round(
-      sumByWhen(tipsTransactions, getTipAmountInHostCurrency, isPendingTransaction),
-    );
+    const isOwed = t => ['OWED', 'INVOICED'].includes(t.settlementStatus);
+    const pendingPlatformTips = Math.round(sumByWhen(tipsTransactions, getTipAmountInHostCurrency, isOwed));
 
     const totalMoneyManaged = await this.getTotalMoneyManaged({ endDate: to });
 
