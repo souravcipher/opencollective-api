@@ -2,18 +2,18 @@
 
 module.exports = {
   up: async (queryInterface, DataTypes) => {
-    await queryInterface.sequelize.query('ALTER TABLE "CommentReactions" RENAME TO "EmojiReactions";').then(() => {
-      queryInterface.sequelize.query(
-        'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_CommentId_fkey" TO "EmojiReactions_CommentId_fkey";',
-      );
-      queryInterface.sequelize.query(
-        'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_FromCollectiveId_fkey" TO "EmojiReactions_FromCollectiveId_fkey";',
-      );
-      queryInterface.sequelize.query(
-        'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_UserId_fkey" TO "EmojiReactions_UserId_fkey";',
-      );
-      queryInterface.sequelize.query('ALTER INDEX "CommentReactions_pkey" RENAME TO "EmojiReactions_pkey";');
-    });
+    await queryInterface.sequelize.query('ALTER TABLE "CommentReactions" RENAME TO "EmojiReactions";');
+
+    await queryInterface.sequelize.query(
+      'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_CommentId_fkey" TO "EmojiReactions_CommentId_fkey";',
+    );
+    await queryInterface.sequelize.query(
+      'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_FromCollectiveId_fkey" TO "EmojiReactions_FromCollectiveId_fkey";',
+    );
+    await queryInterface.sequelize.query(
+      'ALTER TABLE "EmojiReactions" RENAME CONSTRAINT "CommentReactions_UserId_fkey" TO "EmojiReactions_UserId_fkey";',
+    );
+    await queryInterface.sequelize.query('ALTER INDEX "CommentReactions_pkey" RENAME TO "EmojiReactions_pkey";');
 
     await queryInterface.addColumn('EmojiReactions', 'UpdateId', {
       type: DataTypes.INTEGER,
