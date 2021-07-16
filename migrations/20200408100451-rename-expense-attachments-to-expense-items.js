@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: queryInterface => {
     return queryInterface.renameTable('ExpenseAttachments', 'ExpenseItems');
   },

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: (queryInterface, Sequelize) => {
     return queryInterface.changeColumn('ExpenseAttachments', 'url', {
       type: Sequelize.STRING,

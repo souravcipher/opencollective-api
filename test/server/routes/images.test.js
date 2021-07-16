@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { expect } from 'chai';
 import config from 'config';
@@ -9,6 +10,7 @@ import request from 'supertest';
 import app from '../../../server/index';
 import models from '../../../server/models';
 import * as utils from '../../utils';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const application = utils.data('application');
 const userData = utils.data('user1');

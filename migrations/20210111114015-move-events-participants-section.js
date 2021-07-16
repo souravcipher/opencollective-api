@@ -1,8 +1,6 @@
-'use strict';
-
 import { cloneDeep, remove } from 'lodash';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     const [collectives] = await queryInterface.sequelize.query(`
       WITH entries AS (

@@ -25,6 +25,7 @@ import fs from 'fs';
 import { promisify } from 'util';
 
 import { ArgumentParser } from 'argparse';
+import esMain from "es-main";
 import { includes, result } from 'lodash';
 import moment from 'moment';
 
@@ -685,6 +686,6 @@ async function entryPoint(options) {
 }
 
 /* Only call entry point if we're arg[0] */
-if (!module.parent) {
+if (esMain(import.meta)) {
   entryPoint(parseCommandLineArguments());
 }

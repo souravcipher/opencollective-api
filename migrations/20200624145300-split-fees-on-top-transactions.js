@@ -1,5 +1,3 @@
-'use strict';
-
 import { defaultsDeep, omit } from 'lodash';
 
 import roles from '../server/constants/roles';
@@ -7,7 +5,7 @@ import { PLATFORM_TIP_TRANSACTION_PROPERTIES } from '../server/constants/transac
 import { getFxRate } from '../server/lib/currency';
 import models from '../server/models';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     const platform = await models.Collective.findByPk(PLATFORM_TIP_TRANSACTION_PROPERTIES.CollectiveId);
 

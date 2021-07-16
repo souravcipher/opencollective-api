@@ -1,10 +1,8 @@
-'use strict';
-
 import Promise from 'bluebird';
 
 import { generateSummaryForHTML } from '../server/lib/sanitize-html';
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('Updates', 'summary', { type: Sequelize.STRING });
     await queryInterface.addColumn('UpdateHistories', 'summary', { type: Sequelize.STRING });

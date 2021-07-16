@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   /**
    * Set "Collectives" -> "data" -> "useCustomHostFee" to true when their hostFeePercent
    * is different from the one of the host.

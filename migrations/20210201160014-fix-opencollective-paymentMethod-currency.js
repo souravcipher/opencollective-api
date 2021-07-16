@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // Fix Payment Methods currency not matching the Host currency
     await queryInterface.sequelize.query(`

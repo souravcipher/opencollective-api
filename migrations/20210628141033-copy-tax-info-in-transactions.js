@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(`
       UPDATE "Transactions" t

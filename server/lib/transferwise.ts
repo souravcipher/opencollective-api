@@ -2,13 +2,14 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import url from 'url';
+import url, { fileURLToPath } from 'url';
 
 import Axios, { AxiosError } from 'axios';
 import config from 'config';
 import Debug from 'debug';
 import { Request } from 'express';
 import { isNull, omitBy, pick, startCase, toInteger, toUpper } from 'lodash';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 import { TransferwiseError } from '../graphql/errors';
 import {

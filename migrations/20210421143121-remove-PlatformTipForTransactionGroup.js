@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // Migrate all existing platform tips to make sure their TransactionGroup are the same
     // as the transactions they're referring to.

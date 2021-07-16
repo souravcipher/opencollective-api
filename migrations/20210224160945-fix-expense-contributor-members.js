@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // 1. Add the missing CONTRIBUTOR members (~1143 entries)
     await queryInterface.sequelize.query(`

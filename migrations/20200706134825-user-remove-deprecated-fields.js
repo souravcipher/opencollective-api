@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.removeColumn('Users', '_salt');
     await queryInterface.removeColumn('Users', 'refresh_token');

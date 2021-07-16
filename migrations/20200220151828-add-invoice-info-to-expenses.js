@@ -1,8 +1,6 @@
-'use strict';
-
 const colName = 'invoiceInfo';
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     const columnSettings = { type: Sequelize.TEXT, allowNull: true };
     await queryInterface.addColumn('ExpenseHistories', colName, columnSettings);

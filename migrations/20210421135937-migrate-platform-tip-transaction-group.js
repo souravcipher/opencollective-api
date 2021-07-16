@@ -1,10 +1,8 @@
-'use strict';
-
 /**
  * Migrate all entries (1198) missed by `migrations/20201016085526-add-platform-contribution-transaction-group.js`,
  * ignoring the ones already migrated.
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     return queryInterface.sequelize.query(`
       UPDATE
@@ -21,7 +19,7 @@ module.exports = {
         INNER JOIN "Transactions" platform_tip ON (
           t."OrderId" = platform_tip."OrderId"
           AND t."type" = platform_tip."type"
-          AND t.id != platform_tip.id 
+          AND t.id != platform_tip.id
         )
         INNER JOIN "PaymentMethods" pm ON
           t."PaymentMethodId" = pm.id

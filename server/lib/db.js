@@ -6,6 +6,7 @@
  */
 import { exec } from 'child_process';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { promisify } from 'util';
 
 import config from 'config';
@@ -13,7 +14,7 @@ import { get, has } from 'lodash';
 import pg from 'pg';
 import pgConnectionString from 'pg-connection-string';
 import format from 'pg-format';
-
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 /** Load a dump file into the current database.
  *
  * This operation is very useful for at least two situations: 1) setup

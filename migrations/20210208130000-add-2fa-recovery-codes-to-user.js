@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('Users', 'twoFactorAuthRecoveryCodes', {
       type: Sequelize.ARRAY(Sequelize.STRING),

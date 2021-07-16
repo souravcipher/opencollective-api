@@ -2,6 +2,7 @@
 import { ArgumentParser } from 'argparse';
 import config from 'config';
 import cryptojs from 'crypto-js';
+import esMain from "es-main";
 
 import { sequelize } from '../server/models';
 
@@ -94,6 +95,6 @@ function parseCommandLineArguments() {
 }
 /* eslint-enable camelcase */
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   main(parseCommandLineArguments());
 }

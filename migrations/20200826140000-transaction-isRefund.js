@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     const tableDefinition = await queryInterface.describeTable('Transactions');
     if (!tableDefinition.isRefund) {

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     // Delete all tokens to make sure the migration will pass. There are no guest tokens
     // in staging/prod currently, so this is safe.

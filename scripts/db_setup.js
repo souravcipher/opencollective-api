@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import '../server/env';
 
+import esMain from "es-main";
 /**
  * Script for setting up user & database.
  *
@@ -50,6 +51,6 @@ async function main() {
   await Promise.all([client.end(), clientMaint.end(), clientApp.end()]);
 }
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   main();
 }

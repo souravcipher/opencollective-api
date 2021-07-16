@@ -1,5 +1,3 @@
-'use strict';
-
 const destroyDuplicatesQuery = `
   UPDATE "Transactions" t
   SET
@@ -27,7 +25,7 @@ const destroyDuplicatesQuery = `
   )
 `;
 
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(destroyDuplicatesQuery, { replacements: { transactionType: 'CREDIT' } });
     await queryInterface.sequelize.query(destroyDuplicatesQuery, { replacements: { transactionType: 'DEBIT' } });

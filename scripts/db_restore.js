@@ -2,6 +2,7 @@
 import '../server/env';
 
 import { ArgumentParser } from 'argparse';
+import esMain from "es-main";
 
 import * as libdb from '../server/lib/db';
 
@@ -65,6 +66,6 @@ function parseCommandLineArguments() {
 }
 /* eslint-enable camelcase */
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   main(parseCommandLineArguments());
 }

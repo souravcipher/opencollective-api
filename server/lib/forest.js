@@ -1,9 +1,11 @@
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import Liana from 'forest-express-sequelize';
 import { cloneDeep } from 'lodash';
 
 import models, { Op, sequelize } from '../models';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 export async function init() {
   return Liana.init({

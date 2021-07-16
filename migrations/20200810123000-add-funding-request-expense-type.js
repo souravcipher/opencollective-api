@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(
       `ALTER TYPE "enum_Expenses_type" ADD VALUE 'FUNDING_REQUEST' AFTER 'INVOICE';`,

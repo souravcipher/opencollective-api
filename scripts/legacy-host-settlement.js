@@ -2,6 +2,7 @@
 import '../server/env';
 
 import config from 'config';
+import esMain from 'es-main';
 import { parse as json2csv } from 'json2csv';
 import { entries, groupBy, pick, round, sumBy } from 'lodash';
 import moment from 'moment';
@@ -347,7 +348,7 @@ export async function run() {
   }
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run()
     .catch(e => {
       console.error(e);

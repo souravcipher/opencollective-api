@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('Transactions', 'PlatformTipForTransactionGroup', {
       type: Sequelize.STRING,
@@ -22,7 +20,7 @@ module.exports = {
       ), tgroups as (
         select t."TransactionGroup" as "originalTransactionGroup", pf."TransactionGroup" as "platformTipTransactionGroup"
         from "Transactions" t, platformfees pf
-        where pf."OrderId" = t."OrderId" 
+        where pf."OrderId" = t."OrderId"
         and t."deletedAt" is null
         and t."type" = 'CREDIT'
         and t."CollectiveId" != 1

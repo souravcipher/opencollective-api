@@ -1,9 +1,7 @@
-'use strict';
-
 /**
  * Migrate the notion of sub-collective from `ParentCollectiveId` to the `Members` table.
  */
-module.exports = {
+export default {
   up: queryInterface => {
     // Migrate sub-collectives previously linked with organizations through tags ("super collectives")
     // => This will be done manually, as malicious users seeing this migration could abuse it
@@ -59,7 +57,7 @@ module.exports = {
         WHERE   sub_collectives_members."MemberCollectiveId" = c.id
       ) -- Delete members
       DELETE FROM "Members" m
-      WHERE m.id IN (SELECT id FROM sub_collectives_members)    
+      WHERE m.id IN (SELECT id FROM sub_collectives_members)
     `);
   },
 };

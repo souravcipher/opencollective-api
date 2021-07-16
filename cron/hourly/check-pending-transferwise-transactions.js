@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import '../../server/env';
 
+import esMain from 'es-main';
 import moment from 'moment';
 import { Op } from 'sequelize';
 
@@ -74,7 +75,7 @@ export async function run() {
   }
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run()
     .then(() => {
       process.exit(0);

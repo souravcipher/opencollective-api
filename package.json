@@ -3,6 +3,7 @@
   "name": "opencollective-api",
   "description": "Open Collective API",
   "license": "MIT",
+  "type": "module",
   "contributors": [
     "Arnaud Bénard (https://github.com/arnaudbenard)",
     "Aseem Sood (https://github.com/asood123)",
@@ -22,7 +23,7 @@
     "type": "git",
     "url": "https://github.com/opencollective/opencollective-api.git"
   },
-  "main": "server/index.js",
+  "export": "./server/index.js",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
@@ -65,6 +66,7 @@
     "debug": "4.3.1",
     "deepmerge": "4.2.2",
     "dotenv": "10.0.0",
+    "es-main": "1.0.2",
     "errorhandler": "1.5.1",
     "express": "4.17.1",
     "express-basic-auth": "1.2.0",
@@ -134,6 +136,7 @@
     "@typescript-eslint/eslint-plugin": "^4.27.0",
     "@typescript-eslint/parser": "^4.28.1",
     "babel-eslint": "^10.1.0",
+    "babel-register": "^7.0.0-beta.3",
     "chai": "^4.3.4",
     "chai-as-promised": "^7.1.1",
     "chai-jest-snapshot": "^2.0.0",

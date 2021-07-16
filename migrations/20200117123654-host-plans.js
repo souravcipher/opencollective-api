@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.describeTable('Collectives').then(async tableDefinition => {
       if (!tableDefinition.isHostAccount) {

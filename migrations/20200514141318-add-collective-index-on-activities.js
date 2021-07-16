@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     // Add index on Activity > CollectiveId
     await queryInterface.sequelize.query(`

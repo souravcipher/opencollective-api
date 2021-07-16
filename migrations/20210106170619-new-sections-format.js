@@ -1,5 +1,3 @@
-'use strict';
-
 import { cloneDeep, remove } from 'lodash';
 
 const Sections = {
@@ -147,7 +145,7 @@ const convertSectionsToNewFormat = (sections, collectiveType) => {
 /**
  * Migrate collective sections to the new format, saving a backup in `legacySectionsBackup`
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     // Remove customization made so far with the new navbar to start from clean data (only affects staging & dev)
     await queryInterface.sequelize.query(`

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     /** Activity */
     await queryInterface.changeColumn('Activities', 'data', {

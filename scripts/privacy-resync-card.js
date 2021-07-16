@@ -3,6 +3,7 @@
 
 import '../server/env';
 
+import esMain from 'es-main';
 import moment from 'moment';
 
 import { Service as ConnectedAccountServices } from '../server/constants/connected_account';
@@ -46,7 +47,7 @@ const run = async cardId => {
   process.exit(0);
 };
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   if (process.argv.length < 3 || process.argv[2] == 'help') {
     console.log('\nUsage:\n  npm run script ./scripts/privacy-resync-card.js cardId\n');
     process.exit(0);

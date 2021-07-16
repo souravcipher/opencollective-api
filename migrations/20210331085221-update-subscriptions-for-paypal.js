@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     // Add isManagedExternally
     let colParams = { type: Sequelize.BOOLEAN, defaultValue: false };

@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // Lift Added Funds limit whatever the amount of usage before 2020-01-17
 

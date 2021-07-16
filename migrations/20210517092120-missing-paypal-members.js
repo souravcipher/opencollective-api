@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(`
       WITH missing_member_info AS (
@@ -9,7 +7,7 @@ module.exports = {
           o."CollectiveId",
           o."TierId",
           MIN(o."CreatedByUserId") AS "CreatedByUserId",
-          MIN(o."createdAt") AS "createdAt" 
+          MIN(o."createdAt") AS "createdAt"
         FROM
           "Orders" o
         INNER JOIN "PaymentMethods" pm ON

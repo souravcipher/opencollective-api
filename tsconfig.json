@@ -15,7 +15,7 @@
     "checkJs": false,
     "downlevelIteration": true,
     "lib": ["esnext", "dom"],
-    "module": "commonjs",
+    "module": "ES2020",
     "noUnusedLocals": true,
     "outDir": "dist",
     "skipLibCheck": true

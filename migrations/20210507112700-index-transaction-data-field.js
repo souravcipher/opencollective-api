@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(`
       CREATE INDEX CONCURRENTLY transferwise_transfer_id ON "Transactions" (((data -> 'transfer' ->> 'id')::text)) WHERE (data -> 'transfer' ->> 'id') IS NOT NULL;

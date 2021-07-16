@@ -2,6 +2,8 @@
 
 import '../server/env';
 
+import esMain from "es-main";
+
 import { crypto } from '../server/lib/encryption';
 
 if (process.argv.length < 2) {
@@ -16,6 +18,6 @@ const run = () => {
   console.log(decrypt ? crypto.decrypt(string) : crypto.encrypt(string));
 };
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   run();
 }

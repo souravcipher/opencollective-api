@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(`
       CREATE INDEX CONCURRENTLY privacy_transfer_id ON "Transactions" (((data ->> 'token')::text)) WHERE (data ->> 'token') IS NOT NULL;

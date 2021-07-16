@@ -2,6 +2,7 @@
 import '../../server/env';
 
 import config from 'config';
+import esMain from 'es-main';
 import { parse as json2csv } from 'json2csv';
 import { groupBy, pick, sumBy } from 'lodash';
 import moment from 'moment';
@@ -16,7 +17,6 @@ import { getPendingHostFeeShare, getPendingPlatformTips } from '../../server/lib
 import { parseToBoolean } from '../../server/lib/utils';
 import models, { sequelize } from '../../server/models';
 import { PayoutMethodTypes } from '../../server/models/PayoutMethod';
-
 const today = moment.utc();
 
 const defaultDate = process.env.START_DATE ? moment.utc(process.env.START_DATE) : moment.utc();
@@ -228,7 +228,7 @@ AND ts."status" != 'SETTLED'`,
   }
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run(defaultDate)
     .catch(e => {
       console.error(e);

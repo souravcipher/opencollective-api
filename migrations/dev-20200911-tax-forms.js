@@ -1,9 +1,7 @@
-'use strict';
-
 /**
  * Add a required tax for on Open Source host (opensourceorg) to make it easier to test in dev.
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     if (process.env.NODE_ENV === undefined || process.env.NODE_ENV === 'development') {
       return queryInterface.sequelize.query(`

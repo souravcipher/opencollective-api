@@ -1,9 +1,8 @@
-'use strict';
-
 import '../server/env';
 
+let exportObj;
 if (process.env.OC_ENV === 'ci' || process.env.OC_ENV === 'e2e') {
-  module.exports = {
+  exportObj = {
     up: async queryInterface => {
       await queryInterface.sequelize.query(`
 	INSERT INTO "ConnectedAccounts" ("CreatedByUserId", service, "clientId", username, token, "CollectiveId", "createdAt", "updatedAt")
@@ -16,7 +15,7 @@ if (process.env.OC_ENV === 'ci' || process.env.OC_ENV === 'e2e') {
     },
   };
 } else {
-  module.exports = {
+  exportObj = {
     up: () => {
       return Promise.resolve();
     },
@@ -26,3 +25,5 @@ if (process.env.OC_ENV === 'ci' || process.env.OC_ENV === 'e2e') {
     },
   };
 }
+
+export default exportObj;

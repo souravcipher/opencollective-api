@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     return queryInterface.sequelize.query(
       'ALTER TYPE "enum_MemberInvitations_role" ADD VALUE IF NOT EXISTS \'ACCOUNTANT\';',

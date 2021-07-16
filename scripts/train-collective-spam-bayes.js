@@ -3,6 +3,7 @@ import '../server/env';
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import bayes from 'bayes';
 import geoip from 'geoip-lite'; // eslint-disable-line node/no-unpublished-import
@@ -10,6 +11,7 @@ import { get } from 'lodash';
 
 import { collectiveBayesContent } from '../server/lib/spam';
 import models, { Op, sequelize } from '../server/models';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const classifier = bayes();
 

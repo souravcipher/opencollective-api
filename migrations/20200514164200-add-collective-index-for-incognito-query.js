@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // Enhance User.prototype.getIncognitoProfile() performance
     await queryInterface.sequelize.query(`

@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import bayes from 'bayes';
 import config from 'config';
@@ -9,6 +10,7 @@ import sanitizeHtml from 'sanitize-html';
 
 import slackLib, { OPEN_COLLECTIVE_SLACK_CHANNEL } from '../lib/slack';
 import models from '../models';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** Return type when running a spam analysis */
 export type SpamAnalysisReport = {

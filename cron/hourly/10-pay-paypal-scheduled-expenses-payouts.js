@@ -2,6 +2,7 @@
 
 import '../../server/env';
 
+import esMain from 'es-main';
 import { groupBy, values } from 'lodash';
 
 import status from '../../server/constants/expense_status';
@@ -29,7 +30,7 @@ export async function run() {
   logger.info('Done!');
 }
 
-if (require.main === module && process.env.SKIP_PAYPAL_PAYOUTS_WORKER !== 'true') {
+if (esMain(import.meta) && process.env.SKIP_PAYPAL_PAYOUTS_WORKER !== 'true') {
   run()
     .then(() => {
       setTimeout(() => process.exit(0), 10000);

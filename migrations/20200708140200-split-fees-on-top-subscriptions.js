@@ -1,12 +1,10 @@
-'use strict';
-
 import { defaultsDeep, omit } from 'lodash';
 
 import { PLATFORM_TIP_TRANSACTION_PROPERTIES } from '../server/constants/transactions';
 import { getFxRate } from '../server/lib/currency';
 import models from '../server/models';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     // Since all subscriptions are done in Stripe and the bug only affected Subscriptions (status = ACTIVE),
     // it is safe to group transactions by stripe charge id and verify which group has only 2 transactions instead of 4.

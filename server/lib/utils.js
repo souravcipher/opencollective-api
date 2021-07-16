@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import fs from 'fs';
 import path from 'path';
-import { URL } from 'url';
+import { fileURLToPath, URL } from 'url';
 
 import Promise from 'bluebird';
 import config from 'config';
@@ -12,6 +12,7 @@ import { ZERO_DECIMAL_CURRENCIES } from '../constants/currencies';
 
 import errors from './errors';
 import handlebars from './handlebars';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const { BadRequest } = errors;
 

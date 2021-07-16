@@ -1,6 +1,8 @@
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 import handlebars from './handlebars';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /*
  * Loads all the email templates

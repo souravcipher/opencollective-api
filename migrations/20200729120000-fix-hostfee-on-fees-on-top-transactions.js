@@ -1,9 +1,7 @@
-'use strict';
-
 /**
  * HostFee was wrongly calculated on top of totalAmount, which includes feesOnTop.
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     const [transactions, result] = await queryInterface.sequelize.query(`
       SELECT

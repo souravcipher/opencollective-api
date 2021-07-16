@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, DataTypes) => {
     await queryInterface.addColumn('Updates', 'isChangelog', {
       type: DataTypes.BOOLEAN,

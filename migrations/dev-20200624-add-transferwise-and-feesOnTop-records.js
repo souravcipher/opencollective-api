@@ -1,5 +1,3 @@
-'use strict';
-
 const SQL = `
   BEGIN;
 
@@ -29,7 +27,7 @@ const SQL = `
   COMMIT;
 `;
 
-module.exports = {
+export default {
   up: async queryInterface => {
     if (process.env.OC_ENV === undefined || process.env.OC_ENV === 'development') {
       return queryInterface.sequelize.query(SQL);

@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Adds a `FromCollectiveId` column to Expenses tables.
  *
@@ -18,7 +16,7 @@
  * their could be an important cost in migrating the data, and we actually don't care so much if
  * the old entries in History doesn't have a `FromCollectiveId`.
  */
-module.exports = {
+export default {
   up: async (queryInterface, DataTypes) => {
     const fromCollectiveFieldSettings = {
       type: DataTypes.INTEGER,

@@ -1,13 +1,11 @@
-'use strict';
-
 import { cloneDeep, update } from 'lodash';
 
 import { stripHTML } from '../server/lib/sanitize-html';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     const [collectives] = await queryInterface.sequelize.query(`
-      SELECT id, "settings" FROM "Collectives" c 
+      SELECT id, "settings" FROM "Collectives" c
       WHERE "settings" -> 'paymentMethods' -> 'manual' -> 'instructions' IS NOT NULL
       AND ("settings" -> 'paymentMethods' -> 'manual' -> 'instructions')::varchar LIKE '%<%'
     `);

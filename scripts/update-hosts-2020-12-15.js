@@ -2,6 +2,7 @@
 import '../server/env';
 
 import { ArgumentParser } from 'argparse';
+import esMain from 'es-main';
 
 import { PLANS_COLLECTIVE_SLUG } from '../server/constants/plans';
 import models, { Op } from '../server/models';
@@ -89,7 +90,7 @@ function parseCommandLineArguments() {
 
 /* eslint-enable camelcase */
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run(parseCommandLineArguments())
     .then(() => {
       process.exit(0);

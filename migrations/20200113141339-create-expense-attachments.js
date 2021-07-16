@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, DataTypes) => {
     const dbTransaction = await queryInterface.sequelize.transaction();
 
@@ -45,7 +43,7 @@ module.exports = {
           "incurredAt",
           "ExpenseId",
           "CreatedByUserId"
-        ) SELECT 
+        ) SELECT
           e."amount",
           e."attachment",
           e."createdAt",
@@ -54,9 +52,9 @@ module.exports = {
           e."incurredAt",
           e."id",
           e."UserId"
-        FROM 
+        FROM
           "Expenses" e
-        WHERE 
+        WHERE
           attachment IS NOT NULL
       `,
         { transaction: dbTransaction },

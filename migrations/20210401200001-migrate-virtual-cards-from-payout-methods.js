@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, DataTypes) => {
     await queryInterface.addColumn('Expenses', 'VirtualCardId', {
       type: DataTypes.STRING,

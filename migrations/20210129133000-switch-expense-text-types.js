@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async function (queryInterface, DataTypes) {
     await queryInterface.changeColumn('Expenses', 'privateMessage', {
       type: DataTypes.TEXT,

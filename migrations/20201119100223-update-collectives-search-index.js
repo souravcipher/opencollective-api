@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async function (queryInterface) {
     await queryInterface.sequelize.query(`DROP INDEX IF EXISTS "collective_search_index";`);
     await queryInterface.sequelize.query(`

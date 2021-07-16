@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.addColumn('Expenses', 'data', { type: Sequelize.JSONB });
     await queryInterface.addColumn('ExpenseHistories', 'data', { type: Sequelize.JSONB });

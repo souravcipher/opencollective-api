@@ -2,6 +2,7 @@
 import '../../server/env';
 
 import { ArgumentParser } from 'argparse';
+import esMain from 'es-main';
 import { get, intersection } from 'lodash';
 
 import { MODERATION_CATEGORIES_ALIASES } from '../../server/constants/moderation-categories';
@@ -234,7 +235,7 @@ function parseCommandLineArguments() {
 
 /* eslint-enable camelcase */
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run(parseCommandLineArguments())
     .then(() => {
       process.exit(0);

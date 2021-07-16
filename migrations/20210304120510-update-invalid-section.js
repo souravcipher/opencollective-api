@@ -1,22 +1,20 @@
-'use strict';
-
 import { moveSection, removeSection } from './lib/helpers';
 
 /**
  * 1. Move transactions to the budget category
  * 2. Remove deprecated "connect" section
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     // 1. Move transactions to the budget category (~750 entries)
     const [collectivesWithTransactionsSection] = await queryInterface.sequelize.query(`
       WITH entries AS (
         SELECT id, "type", settings, jsonb_array_elements(settings -> 'collectivePage' -> 'sections') AS sections
-        FROM "Collectives" c 
+        FROM "Collectives" c
         WHERE settings -> 'collectivePage' -> 'sections' IS NOT NULL
         AND jsonb_typeof(settings -> 'collectivePage' -> 'sections') != 'null'
       ) SELECT id, "type", settings
-      FROM entries 
+      FROM entries
       WHERE sections ->> 'name' = 'transactions'
     `);
 
@@ -33,11 +31,11 @@ module.exports = {
     const [collectivesWithConnectSection] = await queryInterface.sequelize.query(`
       WITH entries AS (
         SELECT id, "type", settings, jsonb_array_elements(settings -> 'collectivePage' -> 'sections') AS sections
-        FROM "Collectives" c 
+        FROM "Collectives" c
         WHERE settings -> 'collectivePage' -> 'sections' IS NOT NULL
         AND jsonb_typeof(settings -> 'collectivePage' -> 'sections') != 'null'
       ) SELECT id, "type", settings
-      FROM entries 
+      FROM entries
       WHERE sections ->> 'name' = 'connect' AND sections ->> 'type' = 'SECTION'
     `);
 

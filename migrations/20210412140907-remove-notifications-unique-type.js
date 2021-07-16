@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     await queryInterface.sequelize.query(`
       DROP INDEX IF EXISTS "Notifications_type_CollectiveId_UserId";

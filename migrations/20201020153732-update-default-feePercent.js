@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // Update Current Hosts to the previous default which was platformFeePercent=5
     await queryInterface.sequelize.query(`

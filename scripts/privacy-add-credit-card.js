@@ -3,6 +3,7 @@
 
 import '../server/env';
 
+import esMain from "es-main";
 import { toNumber } from 'lodash';
 
 import models, { sequelize } from '../server/models';
@@ -18,7 +19,7 @@ const run = async (CollectiveId, cardNumber, expireDate, cvv) => {
   process.exit(0);
 };
 
-if (!module.parent) {
+if (esMain(import.meta)) {
   if (process.argv.length < 4 || process.argv[2] == 'help') {
     console.log(
       '\nUsage:\n  npm run script ./scripts/encrypt.js collectiveId "xxxx  xxxx  xxxx  xxxx" "mm/yyyy" "cvv"\n',

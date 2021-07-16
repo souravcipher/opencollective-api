@@ -2,6 +2,7 @@
 
 import '../../server/env';
 
+import esMain from 'es-main';
 import { groupBy, values } from 'lodash';
 import moment from 'moment';
 import { Op } from 'sequelize';
@@ -43,7 +44,7 @@ export async function run() {
   logger.info('Done!');
 }
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run()
     .then(() => {
       process.exit(0);

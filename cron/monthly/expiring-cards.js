@@ -2,6 +2,7 @@
 import '../../server/env';
 
 import config from 'config';
+import esMain from 'es-main';
 
 import logger from '../../server/lib/logger';
 import * as libPayments from '../../server/lib/payments';
@@ -96,6 +97,6 @@ const run = async () => {
   process.exit();
 };
 
-if (require.main === module) {
+if (esMain(import.meta)) {
   run();
 }

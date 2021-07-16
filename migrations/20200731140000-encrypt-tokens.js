@@ -1,8 +1,6 @@
-'use strict';
-
 import { crypto } from '../server/lib/encryption';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     const [accounts] = await queryInterface.sequelize.query(
       `SELECT "id", "service", "token", "refreshToken" FROM "ConnectedAccounts" WHERE "hash" IS NULL;`,

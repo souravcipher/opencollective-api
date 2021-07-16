@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async queryInterface => {
     // As the behavior for `limitedToCollectiveIds` was similar to `limitedToHostCollectiveIds`,
     // we migrate the value of the first to the second if there's not one already

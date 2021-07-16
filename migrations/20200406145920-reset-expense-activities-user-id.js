@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Before this migration, all activities created for expenses had their UserId set to the
  * expense's submitter user ID. This was wrong because this field is supposed to tell you who
@@ -9,7 +7,7 @@
  *
  * 'collective.expense.created' is not in the list because we can trust the `UserId` for this one
  */
-module.exports = {
+export default {
   up: queryInterface => {
     return queryInterface.sequelize.query(`
       UPDATE  "Activities"

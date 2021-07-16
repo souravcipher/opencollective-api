@@ -1,11 +1,9 @@
-'use strict';
-
 /**
  * Transactions were mistakinly linked to the user profile instead of the real
  * `FromCollectiveId`. This migration fixes 138 DEBIT transactions and their matching
  * CREDIT transactions.
  */
-module.exports = {
+export default {
   up: async queryInterface => {
     // Update DEBIT transactions
     const [, debitResult] = await queryInterface.sequelize.query(`

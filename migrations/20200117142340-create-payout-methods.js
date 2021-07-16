@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, DataTypes) => {
     const dbTransaction = await queryInterface.sequelize.transaction();
 
@@ -46,16 +44,16 @@ module.exports = {
             "CreatedByUserId",
             "createdAt",
             "updatedAt"
-          ) SELECT 
+          ) SELECT
             'PAYPAL',
             JSON_BUILD_OBJECT('email', u."paypalEmail"),
             u."CollectiveId",
             u."id",
             NOW(),
             NOW()
-          FROM 
+          FROM
             "Users" u
-          WHERE 
+          WHERE
             u."paypalEmail" IS NOT NULL
           AND
             u."deletedAt" IS NULL

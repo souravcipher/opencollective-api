@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     // 1. Add the 'kind' column on Transactions table
     await queryInterface.addColumn('Transactions', 'kind', {
@@ -53,7 +51,7 @@ module.exports = {
 
     // EXPENSE
     await queryInterface.sequelize.query(`
-      UPDATE "Transactions" 
+      UPDATE "Transactions"
       SET "kind" = 'EXPENSE'
       WHERE "ExpenseId" IS NOT NULL
     `);

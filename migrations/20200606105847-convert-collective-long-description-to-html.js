@@ -1,12 +1,10 @@
-'use strict';
-
 import showdown from 'showdown';
 
 import { buildSanitizerOptions, sanitizeHTML } from '../server/lib/sanitize-html';
 
 const converter = new showdown.Converter();
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     const collectives = await queryInterface.sequelize.query(
       `

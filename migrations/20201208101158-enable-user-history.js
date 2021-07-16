@@ -1,6 +1,4 @@
-'use strict';
-
-module.exports = {
+export default {
   up: (queryInterface, DataTypes) => {
     return queryInterface.createTable('UserHistories', {
       id: DataTypes.INTEGER,

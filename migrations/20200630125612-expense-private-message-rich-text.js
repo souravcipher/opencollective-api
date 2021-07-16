@@ -1,8 +1,6 @@
-'use strict';
-
 import { buildSanitizerOptions, sanitizeHTML } from '../server/lib/sanitize-html';
 
-module.exports = {
+export default {
   up: async (queryInterface, Sequelize) => {
     const expenses = await queryInterface.sequelize.query(
       `SELECT "id", "privateMessage" FROM "Expenses" WHERE LENGTH("privateMessage") > 0;`,

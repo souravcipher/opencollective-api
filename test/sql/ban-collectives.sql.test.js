@@ -1,12 +1,14 @@
 /* eslint-disable camelcase */
 
 import path from 'path';
+import { fileURLToPath } from 'url';
 
 import { expect } from 'chai';
 import { readFileSync } from 'fs-extra';
 
 import { sequelize } from '../../server/models';
 import { fakeCollective, fakeEvent, fakeUpdate, fakeUser } from '../test-helpers/fake-data';
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 const banCollectivesQuery = readFileSync(path.join(__dirname, '../../sql/ban-collectives.sql'), 'utf8');
 

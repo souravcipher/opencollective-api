@@ -1,2 +1,1 @@
-/* eslint-disable */
-require('@babel/register')({ extensions: ['.js', '.ts'] });
+(await import('@babel/register')).default({ extensions: ['.js', '.ts'] });

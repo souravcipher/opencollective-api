@@ -1,10 +1,8 @@
-'use strict';
-
 /**
  * See https://github.com/opencollective/opencollective/issues/2790
  * A bug was inverting the "PaymentMethodId" with the "SourcePaymentMethodId" in orders.
  */
-module.exports = {
+export default {
   up: queryInterface => {
     return queryInterface.sequelize.query(`
       WITH payment_methods_used_for_gift_cards AS (

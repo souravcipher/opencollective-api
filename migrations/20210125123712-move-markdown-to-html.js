@@ -1,10 +1,8 @@
-'use strict';
-
 import showdown from 'showdown';
 
 import models from '../server/models';
 
-module.exports = {
+export default {
   up: async queryInterface => {
     const markdownConverter = new showdown.Converter();
 
