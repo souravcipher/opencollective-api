@@ -19,6 +19,7 @@ export const IDENTIFIER_TYPES = {
   COMMENT: 'comment',
   COMMENT_REACTION: 'comment-reaction',
   CONVERSATION: 'conversation',
+  EMAIL_SUBSCRIPTION: 'email-subscription',
   HOST_APPLICATION: 'host-application',
   MEMBER_INVITATION: 'member-invitation',
   PAYOUT_METHOD: 'payout-method',

@@ -1,11 +1,14 @@
-import { GraphQLBoolean, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
+import { GraphQLBoolean, GraphQLList, GraphQLNonNull, GraphQLObjectType, GraphQLString } from 'graphql';
 
+import CHANNEL from '../../../constants/channels';
 import { types as collectiveTypes } from '../../../constants/collectives';
 import models from '../../../models';
 import { hasSeenLatestChangelogEntry } from '../../common/user';
+import EmailSubscriptionType from '../enum/EmailSubscriptionType';
 import { idDecode, IDENTIFIER_TYPES } from '../identifiers';
 import { Account, AccountFields } from '../interface/Account';
 
+import EmailSubscription from './EmailSubscription';
 import { Host } from './Host';
 
 export const Individual = new GraphQLObjectType({
@@ -97,6 +100,39 @@ export const Individual = new GraphQLObjectType({
           } else {
             return false;
           }
+        },
+      },
+      emailSubscriptions: {
+        type: new GraphQLList(new GraphQLNonNull(EmailSubscription)),
+        description: 'List of email subscriptions. Will return null if not authenticated as the owner of the account.',
+        args: {
+          type: {
+            type: new GraphQLList(new GraphQLNonNull(EmailSubscriptionType)),
+            description: 'The type of email subscription to filter by',
+            defaultValue: ['UPDATE_PUBLISHED'],
+          },
+        },
+        async resolve(individual, { type }, req) {
+          if (!req.remoteUser?.isAdminOfCollective(individual) || req.remoteUser.CollectiveId !== individual.id) {
+            return null;
+          }
+
+          const notifications = await models.Notification.findAll({
+            where: {
+              UserId: req.remoteUser.id,
+              channel: CHANNEL.EMAIL,
+              type,
+            },
+          });
+
+          console.log(notifications);
+
+          return notifications.map(notification => ({
+            subscriberAccount: individual,
+            account: req.loaders.Collective.byId.load(notification.CollectiveId),
+            type: notification.type,
+            isActive: Boolean(notification.active),
+          }));
         },
       },
       host: {
