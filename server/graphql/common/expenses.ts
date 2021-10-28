@@ -1005,6 +1005,9 @@ async function payExpenseWithPayPal(remoteUser, expense, host, paymentMethod, to
       toPaypalEmail,
       paymentMethod.token,
     );
+    debug(`payExpenseWithPayPal paymentResponse ${JSON.stringify(paymentResponse)}`);
+
+    debug(`payExpenseWithPayPal createTransactionFromPaidExpense`);
     await createTransactionFromPaidExpense(
       host,
       paymentMethod,
@@ -1015,8 +1018,13 @@ async function payExpenseWithPayPal(remoteUser, expense, host, paymentMethod, to
       fees['hostFeeInHostCurrency'],
       fees['platformFeeInHostCurrency'],
     );
+    debug(`payExpenseWithPayPal markExpenseAsPaid`);
     const updatedExpense = await markExpenseAsPaid(expense, remoteUser);
+    debug(`payExpenseWithPayPal updatedExpense`);
+
+    debug(`payExpenseWithPayPal updateBalance`);
     await paymentMethod.updateBalance();
+    debug(`payExpenseWithPayPal updatedBalance`);
     return updatedExpense;
   } catch (err) {
     debug('paypal> error', JSON.stringify(err, null, '  '));

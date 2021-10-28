@@ -1,3 +1,4 @@
+import debugLib from 'debug';
 import { round, toNumber, truncate } from 'lodash';
 
 import ExpenseType from '../constants/expense_type';
@@ -15,6 +16,8 @@ const { CREDIT, DEBIT } = TransactionTypes;
 const { ADDED_FUNDS, CONTRIBUTION, EXPENSE } = TransactionKind;
 const { TICKET } = TierType;
 const { CHARGE } = ExpenseType;
+
+const debug = debugLib('transactions');
 
 /**
  * Export transactions as CSV
@@ -76,6 +79,8 @@ export async function createFromPaidExpense(
   platformFeeInHostCurrency = 0,
   transactionData,
 ) {
+  debug(`createFromPaidExpense`);
+
   const hostCurrency = host.currency;
   let createPaymentResponse, executePaymentResponse;
   let paymentProcessorFeeInCollectiveCurrency = 0,
@@ -185,6 +190,8 @@ export async function createFromPaidExpense(
 
   transaction.hostCurrencyFxRate = hostCurrencyFxRate;
   transaction.amountInHostCurrency = -Math.round(hostCurrencyFxRate * expense.amount); // amountInHostCurrency is an INTEGER (in cents)
+
+  debug(`createFromPaidExpense transaction ${JSON.stringify(transaction)}`);
   return models.Transaction.createDoubleEntry(transaction);
 }
 
