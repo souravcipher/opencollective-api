@@ -995,7 +995,10 @@ async function createTransactions(
 
 async function payExpenseWithPayPal(remoteUser, expense, host, paymentMethod, toPaypalEmail, fees = {}) {
   debug('payExpenseWithPayPal', expense.id);
+
   try {
+    debug('payExpenseWithPayPal adaptive pay', expense.id);
+
     const paymentResponse = await paymentProviders.paypal.types['adaptive'].pay(
       expense.collective,
       expense,
@@ -1040,6 +1043,8 @@ export async function createTransferWiseTransactionsAndUpdateExpense({ host, exp
  * A soft lock on expenses, that works by adding a `isLocked` flag on expense's data
  */
 const lockExpense = async (id, callback) => {
+  debug(`lockExpense ${id}`);
+
   // Lock expense
   await sequelize.transaction(async sqlTransaction => {
     const expense = await models.Expense.findByPk(id, { lock: true, transaction: sqlTransaction });
@@ -1056,6 +1061,8 @@ const lockExpense = async (id, callback) => {
   try {
     return callback();
   } finally {
+    debug(`unlockExpense ${id}`);
+
     // Unlock expense
     const expense = await models.Expense.findByPk(id);
     await expense.update({ data: { ...expense.data, isLocked: false } });
@@ -1138,6 +1145,8 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
   const { remoteUser } = req;
   const expenseId = args.id;
 
+  debug(`payExpense ${expenseId}`);
+
   if (!remoteUser) {
     throw new Unauthorized('You need to be logged in to pay an expense');
   } else if (!canUseFeature(remoteUser, FEATURE.USE_EXPENSES)) {
@@ -1145,6 +1154,8 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
   }
 
   const expense = await lockExpense(args.id, async () => {
+    debug(`payExpense variousChecks ${expenseId}`);
+
     const expense = await models.Expense.findByPk(expenseId, {
       include: [
         { model: models.Collective, as: 'collective' },
@@ -1178,6 +1189,7 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
       throw new Error('"In kind" donations are not supported anymore');
     }
 
+    debug(`payExpense checkBalance ${expenseId}`);
     const balance = await expense.collective.getBalanceWithBlockedFunds();
     if (expense.amount > balance) {
       throw new Unauthorized(
@@ -1187,6 +1199,8 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
         )}, Expense amount: ${formatCurrency(expense.amount, expense.collective.currency)}`,
       );
     }
+
+    debug(`payExpense checkFees ${expenseId}`);
 
     const payoutMethod = await expense.getPayoutMethod();
     const payoutMethodType = payoutMethod ? payoutMethod.type : expense.getPayoutMethodTypeFromLegacy();
@@ -1213,6 +1227,8 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
         )}`,
       );
     }
+
+    debug(`payExpense check2FA ${expenseId}`);
 
     // 2FA for payouts
     const isTwoFactorAuthenticationRequiredForPayoutMethod = [
@@ -1247,6 +1263,7 @@ export async function payExpense(req: express.Request, args: Record<string, unkn
         } else if (args.forceManual) {
           await createTransactions(host, expense, feesInHostCurrency);
         } else if (paypalPaymentMethod) {
+          debug(`payExpense payExpenseWithPayPal ${expenseId}`);
           return payExpenseWithPayPal(remoteUser, expense, host, paypalPaymentMethod, paypalEmail, feesInHostCurrency);
         } else {
           throw new Error('No Paypal account linked, please reconnect Paypal or pay manually');
