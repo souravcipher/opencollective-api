@@ -1,9 +1,11 @@
-import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLInterfaceType, GraphQLNonNull } from 'graphql';
+import { GraphQLBoolean, GraphQLFloat, GraphQLInt, GraphQLInterfaceType, GraphQLList, GraphQLNonNull } from 'graphql';
 import { GraphQLDateTime } from 'graphql-scalars';
 
 import { HOST_FEE_STRUCTURE } from '../../../constants/host-fee-structure';
 import models from '../../../models';
-import { hostResolver } from '../../common/collective';
+import { PayoutMethodTypes } from '../../../models/PayoutMethod';
+import { getHostSupportedPayoutMethods, hostResolver } from '../../common/collective';
+import { PayoutMethodType } from '../enum';
 import { HostFeeStructure } from '../enum/HostFeeStructure';
 import { Host } from '../object/Host';
 
@@ -53,6 +55,20 @@ export const AccountWithHostFields = {
     type: new GraphQLNonNull(GraphQLBoolean),
     resolve(account: typeof models.Collective): boolean {
       return Boolean(account.isActive);
+    },
+  },
+  supportedPayoutMethods: {
+    type: new GraphQLList(PayoutMethodType),
+    description: 'The list of payout methods this Host accepts for its expenses',
+    async resolve(account, _, req) {
+      const host = await hostResolver(account, null, req);
+      if (host) {
+        return getHostSupportedPayoutMethods(host, req);
+      } else {
+        // For collectives without a host, we allow expenses to be submitted with the "Other"/"Custom" payout method
+        // This is mostly for people trying out the platform.
+        return [PayoutMethodTypes.OTHER];
+      }
     },
   },
 };

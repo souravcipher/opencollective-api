@@ -23,6 +23,7 @@ import { days } from '../../../lib/utils';
 import models, { Op, sequelize } from '../../../models';
 import { PayoutMethodTypes } from '../../../models/PayoutMethod';
 import TransferwiseLib from '../../../paymentProviders/transferwise';
+import { getHostSupportedPayoutMethods } from '../../common/collective';
 import { allowContextPermission, PERMISSION_TYPE } from '../../common/context-permissions';
 import { Unauthorized } from '../../errors';
 import { AccountCollection } from '../collection/AccountCollection';
@@ -249,30 +250,7 @@ export const Host = new GraphQLObjectType({
         type: new GraphQLList(PayoutMethodType),
         description: 'The list of payout methods this Host accepts for its expenses',
         async resolve(host, _, req) {
-          const connectedAccounts = await req.loaders.Collective.connectedAccounts.load(host.id);
-          const supportedPayoutMethods = [PayoutMethodTypes.ACCOUNT_BALANCE, PayoutMethodTypes.BANK_ACCOUNT];
-
-          // Check for PayPal
-          if (connectedAccounts?.find?.(c => c.service === 'paypal') && !host.settings?.disablePaypalPayouts) {
-            supportedPayoutMethods.push(PayoutMethodTypes.PAYPAL); // Payout
-          } else {
-            try {
-              if (await host.getPaymentMethod({ service: 'paypal', type: 'adaptive' })) {
-                supportedPayoutMethods.push(PayoutMethodTypes.PAYPAL); // Adaptive
-              }
-            } catch {
-              // ignore missing paypal payment method
-            }
-          }
-
-          if (!host.settings?.disableCustomPayoutMethod) {
-            supportedPayoutMethods.push(PayoutMethodTypes.OTHER);
-          }
-          if (connectedAccounts?.find?.(c => c.service === 'privacy')) {
-            supportedPayoutMethods.push(PayoutMethodTypes.CREDIT_CARD);
-          }
-
-          return supportedPayoutMethods;
+          return getHostSupportedPayoutMethods(host, req);
         },
       },
       transferwiseBalances: {
