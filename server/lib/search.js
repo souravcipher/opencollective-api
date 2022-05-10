@@ -225,6 +225,7 @@ export const searchCollectivesInDB = async (
       COUNT(*) OVER() AS __total__,
       (${sortSubqueries[sortQueryType]}) as __sort__
     FROM "Collectives" c
+<<<<<<< Updated upstream
     ${countryCodes ? 'LEFT JOIN "Collectives" parentCollective ON c."ParentCollectiveId" = parentCollective.id' : ''}
     WHERE c."deletedAt" IS NULL
     AND c."deactivatedAt" IS NULL
@@ -233,6 +234,16 @@ export const searchCollectivesInDB = async (
     AND c.name != 'incognito'
     AND c.name != 'anonymous'
     AND c."isIncognito" = FALSE ${dynamicConditions}
+=======
+    WHERE "deletedAt" IS NULL
+    AND "deactivatedAt" IS NULL
+    AND "isPledged" IS FALSE
+    AND ("data" ->> 'isGuest')::boolean IS NOT TRUE
+    AND ("data" ->> 'hideFromSearch')::boolean IS NOT TRUE
+    AND name != 'incognito'
+    AND name != 'anonymous'
+    AND "isIncognito" = FALSE ${dynamicConditions}
+>>>>>>> Stashed changes
     ORDER BY __sort__ ${orderBy?.direction || 'DESC'}
     OFFSET :offset
     LIMIT :limit
