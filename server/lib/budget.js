@@ -255,6 +255,7 @@ async function sumCollectivesTransactions(
     withBlockedFunds = false,
     hostCollectiveId = null,
     excludeInternals = false,
+    excludeCrossCollective = false,
     kind,
   } = {},
 ) {
@@ -263,7 +264,16 @@ async function sumCollectivesTransactions(
   const where = {};
 
   if (ids) {
-    where.CollectiveId = ids;
+    if (excludeCrossCollective) {
+      where[Op.and] = {
+        [Op.or]: ids.map(id => ({
+          CollectiveId: id,
+          FromCollectiveId: { [Op.notIn]: ids.filter(otherId => otherId !== id) },
+        })),
+      };
+    } else {
+      where.CollectiveId = ids;
+    }
   }
   if (transactionType) {
     where.type = transactionType;
