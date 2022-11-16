@@ -142,7 +142,7 @@ const orderMutations = {
       }
 
       const result = await createOrderLegacy(legacyOrderObj, req);
-      return { order: result.order, stripeError: result.stripeError, guestToken: result.order.data?.guestToken };
+      return { ...pick(result, ['order', 'stripeError', 'redirectUrl']), guestToken: result.order.data?.guestToken };
     },
   },
   cancelOrder: {

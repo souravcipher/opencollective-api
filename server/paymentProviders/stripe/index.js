@@ -13,8 +13,10 @@ import stripe from '../../lib/stripe';
 import { addParamsToUrl } from '../../lib/utils';
 import models from '../../models';
 
+import checkout from './checkout';
 import creditcard from './creditcard';
 import * as virtualcard from './virtual-cards';
+import * as webhook from './webhook';
 
 const debug = debugLib('stripe');
 
@@ -51,6 +53,7 @@ export default {
   types: {
     default: creditcard,
     creditcard,
+    checkout,
   },
 
   oauth: {
@@ -258,19 +261,23 @@ export default {
         throw new errors.BadRequest('Event not found');
       }
 
-      if (event.type === 'charge.dispute.created') {
-        return creditcard.createDispute(event);
+      switch (event.type) {
+        case 'charge.dispute.created':
+          return creditcard.createDispute(event);
         // Charge dispute has been closed on Stripe (with status of: won/lost/closed)
-      } else if (event.type === 'charge.dispute.closed') {
-        return creditcard.closeDispute(event);
-      } else if (event.type === 'review.opened') {
-        return creditcard.openReview(event);
-      } else if (event.type === 'review.closed') {
-        return creditcard.closeReview(event);
-      } else {
-        console.log(JSON.stringify(event, null, 4));
-        logger.warn(`Stripe: Webhooks: Received an unsupported event type: ${event.type}`);
-        return;
+        case 'charge.dispute.closed':
+          return creditcard.closeDispute(event);
+        case 'review.opened':
+          return creditcard.openReview(event);
+        case 'review.closed':
+          return creditcard.closeReview(event);
+        case 'payment_intent.succeeded':
+        case 'payment_inten.payment_failed':
+          return webhook.handlePaymentIntent(requestBody);
+        default:
+          console.log(JSON.stringify(event, null, 4));
+          logger.warn(`Stripe: Webhooks: Received an unsupported event type: ${event.type}`);
+          return;
       }
     });
   },
