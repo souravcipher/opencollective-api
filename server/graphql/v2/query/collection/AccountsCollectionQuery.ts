@@ -75,7 +75,7 @@ const AccountsCollectionQuery = {
 
       // Bind arguments
       if (args.tag?.length) {
-        where['tags'] = { [Op.contains]: args.tag };
+        where['tags'] = { [Op.in]: args.tag };
       }
 
       if (args.type?.length) {
