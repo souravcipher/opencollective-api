@@ -4,10 +4,12 @@ import { types as collectiveTypes } from '../../../constants/collectives';
 import models from '../../../models';
 import { checkScope } from '../../common/scope-check';
 import { hasSeenLatestChangelogEntry } from '../../common/user';
+import { ExpenseCollection } from '../collection/ExpenseCollection';
 import { OAuthAuthorizationCollection } from '../collection/OAuthAuthorizationCollection';
 import { idDecode, IDENTIFIER_TYPES } from '../identifiers';
 import { Account, AccountFields } from '../interface/Account';
 import { CollectionArgs } from '../interface/Collection';
+import { ExpensesCollectionArgs, ExpensesCollectionResolver } from '../query/collection/ExpensesCollectionQuery';
 
 import { Host } from './Host';
 
@@ -166,6 +168,18 @@ export const Individual = new GraphQLObjectType({
           });
 
           return { nodes, totalCount: result.count, limit, offset };
+        },
+      },
+      submittedExpenses: {
+        type: new GraphQLNonNull(ExpenseCollection),
+        args: ExpensesCollectionArgs,
+        async resolve(userCollective, args, req) {
+          if (userCollective.isIncognito) {
+            return { nodes: [], totalCount: 0, offset: 0, limit: 0 }; // Incognito expenses not supported for now, so no need to return anything
+          }
+
+          const user = await req.loaders.User.byCollectiveId.load(userCollective.id);
+          return ExpensesCollectionResolver({ ...args }, req);
         },
       },
     };

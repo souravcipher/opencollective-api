@@ -1,4 +1,12 @@
-import { GraphQLBoolean, GraphQLInt, GraphQLInterfaceType, GraphQLList, GraphQLNonNull, GraphQLString } from 'graphql';
+import {
+  GraphQLBoolean,
+  GraphQLEnumType,
+  GraphQLInt,
+  GraphQLInterfaceType,
+  GraphQLList,
+  GraphQLNonNull,
+  GraphQLString,
+} from 'graphql';
 import { GraphQLDateTime } from 'graphql-scalars';
 import { GraphQLJSON } from 'graphql-type-json';
 import { assign, get, invert, isEmpty, isNull, merge, omitBy } from 'lodash';
@@ -772,6 +780,7 @@ export const AccountFields = {
   },
   transactions: accountTransactions,
   orders: accountOrders,
+  expenses: accountExpenses,
   conversations: {
     type: new GraphQLNonNull(ConversationCollection),
     args: {
