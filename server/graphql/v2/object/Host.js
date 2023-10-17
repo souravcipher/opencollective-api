@@ -20,6 +20,7 @@ import { TransactionKind } from '../../../constants/transaction-kind';
 import { TransactionTypes } from '../../../constants/transactions';
 import { FEATURE, hasFeature } from '../../../lib/allowed-features';
 import { buildSearchConditions } from '../../../lib/search';
+import Sequelize from '../../../lib/sequelize';
 import sequelize from '../../../lib/sequelize';
 import { ifStr } from '../../../lib/utils';
 import models, { Collective, Op } from '../../../models';
@@ -60,6 +61,7 @@ import { GraphQLHostPlan } from './HostPlan';
 import { GraphQLPaymentMethod } from './PaymentMethod';
 import GraphQLPayoutMethod from './PayoutMethod';
 import { GraphQLStripeConnectedAccount } from './StripeConnectedAccount';
+import { GraphQLVendor } from './Vendor';
 
 const getFilterDateRange = (startDate, endDate) => {
   let dateRange;
@@ -984,6 +986,46 @@ export const GraphQLHost = new GraphQLObjectType({
           });
 
           return { totalCount: agreements.count, limit: args.limit, offset: args.offset, nodes: agreements.rows };
+        },
+      },
+      vendors: {
+        type: new GraphQLNonNull(new GraphQLList(GraphQLVendor)),
+        description: 'Returns a list of vendors that works with this host',
+        args: {
+          forAccount: {
+            type: GraphQLAccountReferenceInput,
+            description: 'Rank vendors based on their relationship with this account',
+          },
+        },
+        async resolve(host, args, req) {
+          const where = {
+            ParentCollectiveId: host.id,
+            type: CollectiveType.VENDOR,
+          };
+
+          if (!req.remoteUser?.isAdmin(host.id)) {
+            where[Op.not] = { settings: { disablePublicExpenseSubmission: true } };
+          }
+
+          const findArgs = { where };
+          if (args.forAccount) {
+            const account = await fetchAccountWithReference(args.forAccount);
+            findArgs.attributes = {
+              include: [[Sequelize.fn('COUNT', Sequelize.col('expenses.id')), 'expenseCount']],
+            };
+            findArgs.include = [
+              {
+                model: models.Expense,
+                as: 'submittedExpenses',
+                where: { CollectiveId: account.id },
+                attributes: [],
+              },
+            ];
+            findArgs.order = [[Sequelize.literal('expenseCount'), 'DESC']];
+          }
+
+          const vendors = await models.Collective.findAll(findArgs);
+          return vendors;
         },
       },
     };
