@@ -46,7 +46,7 @@ async function checkOrphanTransactions() {
   const message = 'No orphan Transaction without a primary Transaction (EXPENSE, CONTRIBUTION, ADDED_FUNDS)';
 
   const results = await sequelize.query(
-    `SELECT COUNT(*)
+    `SELECT COUNT(*) as count
      FROM "Transactions" t1
      INNER JOIN "Transactions" t2 ON t1."TransactionGroup" = t2."TransactionGroup"
      AND t2."kind" NOT IN ('EXPENSE', 'CONTRIBUTION', 'ADDED_FUNDS') AND t2."deletedAt" IS NULL

@@ -44,7 +44,7 @@ async function checkMemberTypes() {
   const message = 'No ACCOUNTANT OR ADMIN member with a type different than USER (no auto fix)';
 
   const results = await sequelize.query(
-    `SELECT COUNT(*)
+    `SELECT COUNT(*) as count
      FROM "Members" as m
      LEFT JOIN "Users" u ON u."CollectiveId" = m."MemberCollectiveId"
      LEFT JOIN "Collectives" c ON c."id" = m."MemberCollectiveId"
